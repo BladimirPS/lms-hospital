@@ -1,2 +1,55 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/forms";
+
+
+/*
+ * Tema de marca — LMS Hospital Regional de Occidente
+ *
+ * IMPORTANTE: en Tailwind v4 las variables de color deben llevar el
+ * prefijo `--color-*` dentro de @theme para convertirse en utilidades
+ * (bg-navy-500, text-sky-700, border-navy-100, etc.). Tus variables
+ * originales (--navy-500, --sky-700...) no generan clases por sí solas
+ * — por eso acá quedan renombradas, no solo copiadas.
+ */
+@theme {
+  /* Primario — Navy (medido del logo HRO, #233b55) */
+  --color-navy-900: #101b26;
+  --color-navy-700: #1a2c40;
+  --color-navy-500: #233b55; /* base */
+  --color-navy-300: #8693a2;
+  --color-navy-100: #dee2e6;
+
+  /* Secundario — Sky (medido de la fachada, #4fa8e0) */
+  --color-sky-900: #244c65;
+  --color-sky-700: #3b7ea8; /* uso: texto/borde sobre blanco. Contraste real 4.44:1 — pasa AA solo para texto grande/UI, NO para texto normal (falta AA 4.5:1) */
+  --color-sky-500: #4fa8e0; /* base. Contraste con texto blanco: 2.62:1 — NO USAR como fondo de botón con texto blanco */
+  --color-sky-300: #9ecfee;
+  --color-sky-100: #e5f2fa;
+
+  /* Semánticos — fijos, independientes de la marca */
+  --color-success: #227c4f;
+  --color-warning: #b57814;
+  --color-error: #b03630;
+  --color-info: #288cc8;
+
+  /* Neutrales — gris con sesgo navy (12% sat), no gris puro */
+  --color-gray-100: #fcfcfd;
+  --color-gray-200: #f6f7f8;
+  --color-gray-300: #eef0f2;
+  --color-gray-600: #8793a1;
+  --color-gray-900: #1f2428;
+
+  /* Tipografía — ajustá si tu proyecto ya define otra fuente */
+  --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+/*
+ * Reglas de uso — para mantener consistencia entre pantallas:
+ *
+ * - Botón primario / enlaces de acción: bg-navy-500 + text-white
+ *   (contraste 11.49:1 — sobra en cualquier tamaño de texto)
+ * - Botón secundario / outline: border-navy-500 + text-navy-500
+ * - Insignias, iconos decorativos, fondos de tarjeta: sky-100 / sky-300
+ * - Texto de enlace inline sobre blanco: sky-700 (AA solo si el texto
+ *   es >= 18px o negrita >= 14px; para texto normal pequeño usá navy-500)
+ * - Nunca: texto blanco sobre sky-500 — usá sky-700 o navy-500 en su lugar

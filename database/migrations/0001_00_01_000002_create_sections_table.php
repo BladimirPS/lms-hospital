@@ -1,0 +1,27 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+
+    public function up(): void
+    {
+        Schema::create('sections', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->foreignId('subdirection_id')->constrained('subdirections');
+            $table->timestamps();
+
+            $table->index('subdirection_id', 'idx_sections_subdirection');
+        });
+    }
+
+
+    public function down(): void
+    {
+        Schema::dropIfExists('sections');
+    }
+};

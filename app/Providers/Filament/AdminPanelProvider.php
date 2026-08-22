@@ -7,12 +7,11 @@ use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Pages\Dashboard;
+use App\Filament\Admin\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Widgets\AccountWidget;
-use Filament\Widgets\FilamentInfoWidget;
+
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
@@ -27,18 +26,25 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->id('admin')
             ->path('admin')
+
+            ->brandName('LMS · Hospital Regional de Occidente')
+            ->brandLogo(asset('images/logo-hro.jpeg'))
+            ->brandLogoHeight('2.5rem')
+            ->favicon(asset('images/favicon-hro.jpeg'))
             ->colors([
-                'primary' => Color::Amber,
+                // Color::hex() genera la escala 50-950 que Filament necesita
+                // a partir de cada color base medido del logo/paleta institucional.
+                'primary' => Color::hex('#233b55'),   // navy-500
+                'info' => Color::hex('#288cc8'),
+                'success' => Color::hex('#227c4f'),
+                'warning' => Color::hex('#b57814'),
+                'danger' => Color::hex('#b03630'),
+                'gray' => Color::hex('#8793a1'),      // gray-600, sesgo navy en vez de gris puro
             ])
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\Filament\Admin\Resources')
             ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\Filament\Admin\Pages')
             ->pages([
                 Dashboard::class,
-            ])
-            ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\Filament\Admin\Widgets')
-            ->widgets([
-                AccountWidget::class,
-                FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

@@ -4,10 +4,20 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    if (! auth()->check()) {
+        return redirect()->route('login');
+    }
+
+    return auth()->user()->hasRole('super_admin')
+        ? redirect('/admin')
+        : redirect()->route('dashboard');
 });
 
 Route::get('/dashboard', function () {
+    if (auth()->user()->hasRole('super_admin')) {
+        return redirect('/admin');
+    }
+
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
