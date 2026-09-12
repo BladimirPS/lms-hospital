@@ -27,9 +27,13 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->id('admin')
             ->path('admin')
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => '#1A3A5C',
             ])
+            ->brandName('Sistema LMS — HRO')
+            ->favicon(public_path('favicon.ico'))
+            ->brandlogo(asset('img/logo-hro-blanco-horizontal.png'))
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\Filament\Admin\Resources')
             ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\Filament\Admin\Pages')
             ->pages([

@@ -1,0 +1,93 @@
+@import '../../variables.css';
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+@source '../../../../app/Filament/Admin/**/*';
+@source '../../../../resources/views/filament/admin/**/*';
+@source '../../../../app/Providers/Filament';
+
+/* ============================================
+   TOPBAR — reglas genéricas primero
+   ============================================ */
+.fi-topbar,
+.fi-topbar nav {
+    background-color: var(--color-primary) !important;
+}
+
+.fi-topbar,
+.fi-topbar * {
+    color: #ffffff !important;
+}
+
+.fi-topbar svg {
+    color: #ffffff !important;
+    fill: none;
+}
+
+/* ============================================
+   TOPBAR — excepciones específicas
+   (deben ir DESPUÉS de las genéricas para ganar)
+   ============================================ */
+
+/* Buscador global: fondo blanco, texto oscuro legible, esquinas redondeadas */
+.fi-topbar .fi-global-search-field {
+    background-color: #ffffff !important;
+    border-radius: 0.5rem !important;
+}
+
+.fi-topbar .fi-global-search-field input {
+    color: var(--color-text) !important;
+}
+
+.fi-topbar .fi-global-search-field input::placeholder {
+    color: var(--color-text-muted) !important;
+}
+
+.fi-topbar .fi-global-search-field svg {
+    color: var(--color-text-muted) !important;
+}
+
+/* Toggle / avatar del menú de usuario (botón cerrado, dentro del topbar) */
+.fi-topbar .fi-user-menu-trigger,
+.fi-topbar .fi-avatar {
+    color: var(--color-text) !important;
+}
+
+.fi-topbar .fi-user-menu-trigger svg {
+    color: #ffffff !important;
+}
+
+/* Panel desplegable del menú de usuario (abierto) — excluir del forzado blanco */
+.fi-topbar .fi-dropdown-panel,
+.fi-topbar .fi-dropdown-panel * {
+    color: var(--color-text) !important;
+}
+
+.fi-topbar .fi-dropdown-panel {
+    background-color: #ffffff !important;
+}
+
+.fi-topbar .fi-dropdown-panel svg {
+    color: var(--color-text-muted) !important;
+}
+
+/* ============================================
+   SIDEBAR
+   ============================================ */
+.fi-sidebar {
+    background-color: #ffffff;
+    border-right: 1px solid var(--color-border);
+}
+.fi-sidebar-nav {
+    background-color: #ffffff;
+}
+.fi-sidebar-item-active .fi-sidebar-item-button {
+    background-color: color-mix(in srgb, var(--color-secondary) 12%, white);
+    color: var(--color-primary);
+}
+
+/* ============================================
+   FONDO GENERAL DEL PANEL
+   ============================================ */
+.fi-main {
+    background-color: var(--color-bg);
+}
