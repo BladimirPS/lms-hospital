@@ -7,12 +7,10 @@ use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\MenuItem;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
-use Filament\Support\Colors\Color;
-use Filament\Widgets\AccountWidget;
-use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
@@ -40,10 +38,38 @@ class AdminPanelProvider extends PanelProvider
                 Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\Filament\Admin\Widgets')
-            ->widgets([
-                AccountWidget::class,
-                FilamentInfoWidget::class,
+            ->userMenuItems([
+    'profile' => MenuItem::make()
+        ->label('Mi perfil')
+        ->url(fn () => \App\Filament\Admin\Pages\EditProfile::getUrl())
+        ->icon('heroicon-o-user-circle'),
+
+    'settings' => MenuItem::make()
+        ->label('Configuración del sistema')
+        ->url(fn () => '/admin/profile')
+        ->icon('heroicon-o-cog-6-tooth')
+        ->visible(fn () => auth()->user()->hasRole('superadmin')),
+])
+
+            // --- Notificaciones (campana en el topbar) ---
+            //->databaseNotifications()
+            //->databaseNotificationsPolling('30s')
+
+            // --- Buscador global ---
+            ->globalSearch(true)
+
+            // --- Breadcrumbs ---
+            ->breadcrumbs(true)
+
+            // --- Menú desplegable de usuario ---
+            ->userMenuItems([
+                'settings' => MenuItem::make()
+                    ->label('Configuración del sistema')
+                    ->url(fn () => '/admin/profile') // ajustar cuando exista la SettingsPage
+                    ->icon('heroicon-o-cog-6-tooth')
+                    ->visible(fn () => auth()->user()->hasRole('superadmin')),
             ])
+
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

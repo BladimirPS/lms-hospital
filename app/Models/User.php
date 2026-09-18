@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
 use Filament\Panel;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser, HasName
@@ -24,7 +26,6 @@ class User extends Authenticatable implements FilamentUser, HasName
         'second_last_name',
         'email',
         'password',
-        'email_verified_at',
         'profile_photo',
         'signature_image',
         'hire_date',
@@ -45,39 +46,59 @@ class User extends Authenticatable implements FilamentUser, HasName
     protected function casts(): array
     {
         return [
-            'email_verified_at'  => 'datetime',
+            'email_verified_at' => 'datetime',
+            'hire_date' => 'date',
+            'active' => 'boolean',
             'invitation_sent_at' => 'datetime',
-            'last_access_at'     => 'datetime',
-            'hire_date'          => 'date',
-            'password'           => 'hashed',
-            'active'             => 'boolean',
+            'last_access_at' => 'datetime',
+            'password' => 'hashed',
         ];
     }
 
-    // Requerido por HasName
     public function getFilamentName(): string
     {
-        return trim("{$this->first_name} {$this->last_name}");
+        return trim("{$this->first_name} {$this->middle_name} {$this->last_name} {$this->second_last_name}", ' ');
     }
 
-    // Requerido por FilamentUser
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->hasRole('superadmin') || $this->hasRole('encargado');
+        if (! $this->active) {
+            return false;
+        }
+
+        return match ($panel->getId()) {
+            'admin' => $this->hasAnyRole(['superadmin', 'encargado']),
+            default => false,
+        };
     }
 
-    public function section()
+    public function section(): BelongsTo
     {
         return $this->belongsTo(Section::class);
     }
 
-    public function courses()
+    public function enrollments(): HasMany
+    {
+        return $this->hasMany(Enrollment::class);
+    }
+
+    public function coursesCreated(): HasMany
     {
         return $this->hasMany(Course::class, 'creator_id');
     }
 
-    public function enrollments()
+    public function reviews(): HasMany
     {
-        return $this->hasMany(Enrollment::class);
+        return $this->hasMany(Review::class);
+    }
+
+    public function accessLogs(): HasMany
+    {
+        return $this->hasMany(AccessLog::class);
+    }
+
+    public function notificationLogs(): HasMany
+    {
+        return $this->hasMany(NotificationLog::class);
     }
 }
