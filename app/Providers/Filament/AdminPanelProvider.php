@@ -17,6 +17,7 @@ use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Filament\Navigation\NavigationItem;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -37,6 +38,16 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 Dashboard::class,
             ])
+
+
+->navigationItems([
+    NavigationItem::make('Reportes y estadísticas')
+        ->url('/admin-reportes/reportes')
+        ->icon('heroicon-o-chart-bar')
+        ->group('Reportes')
+        ->sort(1),
+])
+
             ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\Filament\Admin\Widgets')
             ->userMenuItems([
     'profile' => MenuItem::make()

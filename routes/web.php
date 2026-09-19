@@ -6,6 +6,7 @@ use App\Http\Controllers\Student\CourseController;
 use App\Http\Controllers\Student\DashboardController;
 use App\Http\Controllers\Student\DiplomaController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\ReportController;
 
 // Ruta raíz — redirige según rol
 Route::get('/', function () {
@@ -19,6 +20,16 @@ Route::get('/', function () {
 
     return redirect()->route('student.dashboard');
 });
+
+
+Route::middleware(['auth', \Spatie\Permission\Middleware\RoleMiddleware::using('superadmin|encargado')])
+    ->prefix('admin-reportes')
+    ->name('admin.')
+    ->group(function () {
+        Route::get('/reportes', [ReportController::class, 'index'])->name('reports');
+        Route::get('/reportes/excel', [ReportController::class, 'exportExcel'])->name('reports.excel');
+        Route::get('/reportes/pdf', [ReportController::class, 'exportPdf'])->name('reports.pdf');
+    });
 
 // Perfil
 Route::middleware('auth')->group(function () {
