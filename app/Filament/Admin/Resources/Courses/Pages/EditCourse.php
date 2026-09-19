@@ -18,4 +18,10 @@ class EditCourse extends EditRecord
             DeleteAction::make(),
         ];
     }
+    protected function afterSave(): void
+    {
+        if ($this->record->status === 'published') {
+            $this->record->createEnrollmentsForSections();
+        }
+    }
 }

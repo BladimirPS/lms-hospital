@@ -31,8 +31,11 @@ class UserForm
                     ->email()
                     ->required(),
                 TextInput::make('password')
-                    ->password()
-                    ->required(),
+    ->label('Contraseña')
+    ->password()
+    ->dehydrated(fn ($state) => filled($state))
+    ->required(fn (string $operation): bool => $operation === 'create')
+    ->helperText('Dejar en blanco para mantener la contraseña actual.'),
                 DateTimePicker::make('email_verified_at'),
                 TextInput::make('profile_photo'),
                 FileUpload::make('signature_image')

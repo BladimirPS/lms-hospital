@@ -148,15 +148,16 @@ class CourseForm
                                             ->relationship('lessons')
                                             ->orderColumn('order')
                                             ->collapsible()
-                                            ->itemLabel(fn (array $state): ?string =>
-    match($state['type'] ?? null) {
-        'server_video'  => '🎬 ' . ($state['title'] ?? 'Nueva lección'),
-        'youtube_video' => '▶️ ' . ($state['title'] ?? 'Nueva lección'),
-        'pdf'           => '📄 ' . ($state['title'] ?? 'Nueva lección'),
-        'article'       => '📝 ' . ($state['title'] ?? 'Nueva lección'),
-        default         => '📚 ' . ($state['title'] ?? 'Nueva lección'),
-    }
-)
+                                            ->itemLabel(
+                                                fn(array $state): ?string =>
+                                                match ($state['type'] ?? null) {
+                                                    'server_video'  => '🎬 ' . ($state['title'] ?? 'Nueva lección'),
+                                                    'youtube_video' => '▶️ ' . ($state['title'] ?? 'Nueva lección'),
+                                                    'pdf'           => '📄 ' . ($state['title'] ?? 'Nueva lección'),
+                                                    'article'       => '📝 ' . ($state['title'] ?? 'Nueva lección'),
+                                                    default         => '📚 ' . ($state['title'] ?? 'Nueva lección'),
+                                                }
+                                            )
                                             ->addActionLabel('+ Agregar lección')
                                             ->extraAttributes(['style' => 'background-color: #EDFAF1; border-left: 4px solid #27AE60; border-radius: 8px; padding: 4px;'])
                                             ->schema([

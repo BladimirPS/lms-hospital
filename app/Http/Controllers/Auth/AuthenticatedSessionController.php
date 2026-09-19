@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
+
 class AuthenticatedSessionController extends Controller
 {
     /**
@@ -28,7 +29,15 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        if (auth()->user()->hasRole('estudiante')) {
+            return redirect()->route('student.dashboard');
+        }
+
+        if (auth()->user()->hasRole('superadmin') || auth()->user()->hasRole('encargado')) {
+            return redirect('/admin');
+        }
+
+        return redirect('/');
     }
 
     /**

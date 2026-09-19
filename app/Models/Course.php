@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Models\Enrollment;
 
 class Course extends Model
 {
@@ -94,4 +95,22 @@ class Course extends Model
             'exam_id'
         );
     }
+
+public function createEnrollmentsForSections(): void
+{
+    $sections = $this->sections()->with('users')->get();
+
+    foreach ($sections as $section) {
+        foreach ($section->users as $user) {
+            Enrollment::firstOrCreate([
+                'user_id'   => $user->id,
+                'course_id' => $this->id,
+            ], [
+                'status'      => 'in_progress',
+                'progress'    => 0,
+                'enrolled_at' => now(),
+            ]);
+        }
+    }
+}
 }

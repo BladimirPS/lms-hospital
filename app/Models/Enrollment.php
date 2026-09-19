@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use App\Models\ExamAttempt;
 
 class Enrollment extends Model
 {
@@ -54,4 +55,8 @@ class Enrollment extends Model
     {
         return $this->hasOne(Diploma::class);
     }
+    public function attempts()
+{
+    return $this->hasMany(ExamAttempt::class);
+}
 }
