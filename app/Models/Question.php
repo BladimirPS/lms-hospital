@@ -31,6 +31,11 @@ class Question extends Model
         return $this->belongsTo(Exam::class);
     }
 
+    public function options(): HasMany
+    {
+        return $this->hasMany(AnswerOption::class);
+    }
+
     public function answerOptions(): HasMany
     {
         return $this->hasMany(AnswerOption::class);

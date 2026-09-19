@@ -9,6 +9,8 @@ use App\Filament\Admin\Resources\Courses\Pages\ViewCourse;
 use App\Filament\Admin\Resources\Courses\Schemas\CourseForm;
 use App\Filament\Admin\Resources\Courses\Schemas\CourseInfolist;
 use App\Filament\Admin\Resources\Courses\Tables\CoursesTable;
+use App\Filament\Admin\Resources\Courses\RelationManagers\ExamRelationManager;
+
 use App\Models\Course;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -18,6 +20,7 @@ use Filament\Tables\Table;
 
 class CourseResource extends Resource
 {
+
     protected static ?string $model = Course::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
@@ -39,12 +42,14 @@ class CourseResource extends Resource
         return CoursesTable::configure($table);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
+
+
+public static function getRelations(): array
+{
+    return [
+        ExamRelationManager::class,
+    ];
+}
 
     public static function getPages(): array
     {

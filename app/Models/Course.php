@@ -13,6 +13,12 @@ class Course extends Model
 {
     use HasFactory;
 
+    protected static function booted(): void
+{
+    static::created(function (Course $course) {
+        $course->exam()->firstOrCreate([]);
+    });
+}
     protected $fillable = [
         'title',
         'description',
@@ -78,5 +84,14 @@ class Course extends Model
     public function reviews(): HasMany
     {
         return $this->hasMany(Review::class);
+    }
+    public function questions()
+    {
+        return $this->hasManyThrough(
+            \App\Models\Question::class,
+            \App\Models\Exam::class,
+            'course_id',
+            'exam_id'
+        );
     }
 }

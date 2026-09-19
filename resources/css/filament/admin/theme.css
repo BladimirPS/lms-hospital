@@ -91,3 +91,14 @@
 .fi-main {
     background-color: var(--color-bg);
 }
+
+/* Alternancia de color en lecciones */
+.fi-fo-repeater-item:nth-child(odd) {
+    background-color: #F8FAFC;
+    border-radius: 8px;
+}
+
+.fi-fo-repeater-item:nth-child(even) {
+    background-color: #EBF3FB;
+    border-radius: 8px;
+}
