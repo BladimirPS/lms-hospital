@@ -19,6 +19,9 @@ use Filament\Tables\Table;
 class SectionResource extends Resource
 {
     protected static ?string $model = Section::class;
+    protected static ?string $modelLabel = 'Sección';
+protected static ?string $pluralModelLabel = 'Secciones';
+protected static ?string $navigationLabel = 'Secciones';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

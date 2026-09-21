@@ -16,6 +16,7 @@ class SubdirectionsTable
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label('Nombre')
                     ->searchable(),
                 TextColumn::make('created_at')
                     ->dateTime()

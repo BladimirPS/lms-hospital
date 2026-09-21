@@ -11,58 +11,68 @@ use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
+
 class CoursesTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
+                ImageColumn::make('cover_image')
+                    ->label('Portada'),
                 TextColumn::make('title')
+                    ->label('Título')
                     ->searchable(),
-                ImageColumn::make('cover_image'),
                 TextColumn::make('type')
-                    ->searchable(),
-                TextColumn::make('version')
-                    ->numeric()
-                    ->sortable(),
-                TextColumn::make('parentVersion.title')
-                    ->searchable(),
-                IconColumn::make('is_free_choice')
-                    ->boolean(),
-                IconColumn::make('generates_diploma')
-                    ->boolean(),
+                    ->label('Tipo')
+                    ->formatStateUsing(fn ($state) => match($state) {
+                        'talk'     => 'Charla',
+                        'workshop' => 'Taller',
+                        default    => $state,
+                    }),
+                TextColumn::make('status')
+                    ->label('Estado')
+                    ->formatStateUsing(fn ($state) => match($state) {
+                        'draft'     => 'Borrador',
+                        'published' => 'Publicado',
+                        'archived'  => 'Archivado',
+                        default     => $state,
+                    }),
                 TextColumn::make('minimum_score')
+                    ->label('Nota mínima (%)')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('start_date')
+                    ->label('Inicio')
                     ->date()
                     ->sortable(),
                 TextColumn::make('due_date')
+                    ->label('Vencimiento')
                     ->date()
                     ->sortable(),
-                TextColumn::make('status')
-                    ->searchable(),
-                TextColumn::make('creator.id')
+                IconColumn::make('is_free_choice')
+                    ->label('Libre elección')
+                    ->boolean(),
+                IconColumn::make('generates_diploma')
+                    ->label('Diploma')
+                    ->boolean(),
+                TextColumn::make('creator.first_name')
+                    ->label('Creado por')
                     ->searchable(),
                 TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
+                    ->label('Creado')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
+                ViewAction::make()->label('Ver'),
+                EditAction::make()->label('Editar'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()->label('Eliminar seleccionados'),
                 ]),
             ]);
     }

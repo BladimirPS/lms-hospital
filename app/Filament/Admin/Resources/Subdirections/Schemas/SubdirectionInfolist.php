@@ -11,11 +11,14 @@ class SubdirectionInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('name'),
+                TextEntry::make('name')
+                    ->label('Nombre'),
                 TextEntry::make('created_at')
+                    ->label('Fecha de creación')
                     ->dateTime()
                     ->placeholder('-'),
                 TextEntry::make('updated_at')
+                    ->label('Última actualización')
                     ->dateTime()
                     ->placeholder('-'),
             ]);

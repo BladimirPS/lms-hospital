@@ -56,9 +56,14 @@ class User extends Authenticatable implements FilamentUser, HasName
     }
 
     public function getFilamentName(): string
-    {
-        return trim("{$this->first_name} {$this->middle_name} {$this->last_name} {$this->second_last_name}", ' ');
-    }
+{
+    return trim(collect([
+        $this->first_name,
+        $this->middle_name,
+        $this->last_name,
+        $this->second_last_name,
+    ])->filter()->implode(' '));
+}
 
     public function canAccessPanel(Panel $panel): bool
     {
@@ -101,4 +106,5 @@ class User extends Authenticatable implements FilamentUser, HasName
     {
         return $this->hasMany(NotificationLog::class);
     }
+
 }

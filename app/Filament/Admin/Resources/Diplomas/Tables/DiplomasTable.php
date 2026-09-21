@@ -16,40 +16,36 @@ class DiplomasTable
         return $table
             ->columns([
                 TextColumn::make('enrollment.id')
-                    ->searchable(),
-                TextColumn::make('attempt.id')
+                    ->label('Inscripción')
                     ->searchable(),
                 TextColumn::make('diploma_code')
+                    ->label('Código de diploma')
                     ->searchable(),
                 TextColumn::make('manager_name')
+                    ->label('Encargado')
                     ->searchable(),
                 TextColumn::make('obtained_score')
+                    ->label('Calificación')
                     ->numeric()
                     ->sortable(),
                 TextColumn::make('issued_at')
+                    ->label('Fecha de emisión')
                     ->date()
                     ->sortable(),
-                TextColumn::make('pdf_path')
-                    ->searchable(),
                 TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                TextColumn::make('updated_at')
+                    ->label('Creado')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->filters([
-                //
-            ])
+            ->filters([])
             ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
+                ViewAction::make()->label('Ver'),
+                EditAction::make()->label('Editar'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
-                    DeleteBulkAction::make(),
+                    DeleteBulkAction::make()->label('Eliminar seleccionados'),
                 ]),
             ]);
     }

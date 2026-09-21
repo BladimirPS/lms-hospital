@@ -19,6 +19,9 @@ use Filament\Tables\Table;
 class SubdirectionResource extends Resource
 {
     protected static ?string $model = Subdirection::class;
+    protected static ?string $modelLabel = 'Subdirección';
+protected static ?string $pluralModelLabel = 'Subdirecciones';
+protected static ?string $navigationLabel = 'Subdirecciones';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 

@@ -11,13 +11,16 @@ class SectionInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('name'),
+                TextEntry::make('name')
+                    ->label('Nombre'),
                 TextEntry::make('subdirection.name')
-                    ->label('Subdirection'),
+                    ->label('Subdirección'),
                 TextEntry::make('created_at')
+                    ->label('Fecha de creación')
                     ->dateTime()
                     ->placeholder('-'),
                 TextEntry::make('updated_at')
+                    ->label('Última actualización')
                     ->dateTime()
                     ->placeholder('-'),
             ]);

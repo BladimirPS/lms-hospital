@@ -23,6 +23,9 @@ class DiplomaResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'Diplomas';
+    protected static ?string $modelLabel = 'Diploma';
+protected static ?string $pluralModelLabel = 'Diplomas';
+protected static ?string $navigationLabel = 'Diplomas';
 
     public static function form(Schema $schema): Schema
     {

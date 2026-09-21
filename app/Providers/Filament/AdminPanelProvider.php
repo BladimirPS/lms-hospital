@@ -8,6 +8,8 @@ use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\MenuItem;
+use Filament\Navigation\NavigationGroup;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -17,7 +19,8 @@ use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Filament\Navigation\NavigationItem;
+use App\Filament\Admin\Pages\CustomDashboard;
+
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -32,55 +35,29 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->brandName('Sistema LMS — HRO')
             ->favicon(public_path('favicon.ico'))
-            ->brandlogo(asset('img/logo-hro-blanco-horizontal.png'))
+            ->brandLogo(asset('img/logo-hro-blanco-horizontal.png'))
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\Filament\Admin\Resources')
             ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\Filament\Admin\Pages')
             ->pages([
-                Dashboard::class,
+                CustomDashboard::class,
             ])
 
-
-->navigationItems([
-    NavigationItem::make('Reportes y estadísticas')
-        ->url('/admin-reportes/reportes')
-        ->icon('heroicon-o-chart-bar')
-        ->group('Reportes')
-        ->sort(1),
-])
-
-            ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\Filament\Admin\Widgets')
-            ->userMenuItems([
-    'profile' => MenuItem::make()
-        ->label('Mi perfil')
-        ->url(fn () => \App\Filament\Admin\Pages\EditProfile::getUrl())
-        ->icon('heroicon-o-user-circle'),
-
-    'settings' => MenuItem::make()
-        ->label('Configuración del sistema')
-        ->url(fn () => '/admin/profile')
-        ->icon('heroicon-o-cog-6-tooth')
-        ->visible(fn () => auth()->user()->hasRole('superadmin')),
-])
-
-            // --- Notificaciones (campana en el topbar) ---
-            //->databaseNotifications()
-            //->databaseNotificationsPolling('30s')
-
-            // --- Buscador global ---
-            ->globalSearch(true)
-
-            // --- Breadcrumbs ---
-            ->breadcrumbs(true)
-
-            // --- Menú desplegable de usuario ---
+            ->navigationItems([
+                NavigationItem::make('Reportes y estadísticas')
+                    ->url('/admin-reportes/reportes')
+                    ->icon('heroicon-o-chart-bar')
+                    ->group('Reportes')
+                    ->sort(1),
+            ])
             ->userMenuItems([
                 'settings' => MenuItem::make()
                     ->label('Configuración del sistema')
-                    ->url(fn () => '/admin/profile') // ajustar cuando exista la SettingsPage
-                    ->icon('heroicon-o-cog-6-tooth')
+                    ->url(fn () => '/admin/profile')
+                    //
                     ->visible(fn () => auth()->user()->hasRole('superadmin')),
             ])
-
+            ->globalSearch(true)
+            ->breadcrumbs(true)
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
