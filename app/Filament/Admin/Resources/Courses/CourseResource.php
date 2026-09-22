@@ -10,6 +10,8 @@ use App\Filament\Admin\Resources\Courses\Schemas\CourseForm;
 use App\Filament\Admin\Resources\Courses\Schemas\CourseInfolist;
 use App\Filament\Admin\Resources\Courses\Tables\CoursesTable;
 use App\Filament\Admin\Resources\Courses\RelationManagers\ExamRelationManager;
+use App\Filament\Admin\Resources\Courses\RelationManagers\EnrollmentsRelationManager;
+
 
 use App\Models\Course;
 use BackedEnum;
@@ -21,9 +23,9 @@ use Filament\Tables\Table;
 class CourseResource extends Resource
 {
 
-protected static ?string $modelLabel = 'Curso';
-protected static ?string $pluralModelLabel = 'Cursos';
-protected static ?string $navigationLabel = 'Cursos';
+    protected static ?string $modelLabel = 'Curso';
+    protected static ?string $pluralModelLabel = 'Cursos';
+    protected static ?string $navigationLabel = 'Cursos';
     protected static ?string $model = Course::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
@@ -47,12 +49,13 @@ protected static ?string $navigationLabel = 'Cursos';
 
 
 
-public static function getRelations(): array
-{
-    return [
-        ExamRelationManager::class,
-    ];
-}
+    public static function getRelations(): array
+    {
+        return [
+            ExamRelationManager::class,
+            EnrollmentsRelationManager::class,
+        ];
+    }
 
     public static function getPages(): array
     {
@@ -63,4 +66,5 @@ public static function getRelations(): array
             'edit' => EditCourse::route('/{record}/edit'),
         ];
     }
+
 }
