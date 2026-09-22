@@ -10,6 +10,10 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use App\Services\InvitationService;
+use Filament\Actions\Action;
+
+
 
 class UsersTable
 {
@@ -72,6 +76,16 @@ class UsersTable
             ->recordActions([
                 ViewAction::make(),
                 EditAction::make(),
+                Action::make('reenviar_invitacion')
+                    ->label('Reenviar invitación')
+                    ->icon('heroicon-o-envelope')
+                    ->color('info')
+                    ->requiresConfirmation()
+                    ->modalHeading('Reenviar invitación')
+                    ->modalDescription('¿Está seguro que desea reenviar el correo de invitación a este usuario?')
+                    ->action(fn($record) => app(InvitationService::class)->send($record))
+                    ->visible(fn($record) => !$record->active),
+
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

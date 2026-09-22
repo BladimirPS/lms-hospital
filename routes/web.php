@@ -7,6 +7,8 @@ use App\Http\Controllers\Student\DashboardController;
 use App\Http\Controllers\Student\DiplomaController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ReportController;
+use App\Http\Controllers\InvitationController;
+
 
 // Ruta raíz — redirige según rol
 Route::get('/', function () {
@@ -21,7 +23,12 @@ Route::get('/', function () {
     return redirect()->route('student.dashboard');
 });
 
+// Rutas de invitación
+Route::get('/invitacion/{token}', [InvitationController::class, 'activate'])->name('invitation.activate');
+Route::post('/invitacion/{token}', [InvitationController::class, 'store'])->name('invitation.store');
 
+
+// Rutas de reportes — solo accesibles para superadmin y encargado
 Route::middleware(['auth', \Spatie\Permission\Middleware\RoleMiddleware::using('superadmin|encargado')])
     ->prefix('admin-reportes')
     ->name('admin.')
