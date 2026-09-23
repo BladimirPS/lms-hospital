@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Student;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
+
 class DashboardController extends Controller
 {
     public function index()
@@ -17,8 +18,13 @@ class DashboardController extends Controller
             ->orderBy('updated_at', 'desc')
             ->get();
 
-        $inProgress  = $enrollments->where('status', 'in_progress');
-        $completed   = $enrollments->where('status', 'completed');
+        $inProgress = $enrollments->where('status', 'in_progress')->map(function ($enrollment) {
+            $enrollment->is_locked      = $enrollment->isLocked();
+            $enrollment->is_not_started = $enrollment->isNotStarted();
+            return $enrollment;
+        });
+
+        $completed = $enrollments->where('status', 'completed');
         $diplomas    = $user->enrollments()
             ->with(['diploma', 'course'])
             ->whereHas('diploma')

@@ -20,16 +20,21 @@ class CourseController extends Controller
         if ($enrollment->user_id !== auth()->id()) {
             abort(403);
         }
-
         $enrollment->load(['course.modules.lessons', 'lessonProgress', 'course']);
+
+        $isLocked = $enrollment->isLocked();
+        $isNotStarted = $enrollment->isNotStarted();
+        if ($isLocked && $enrollment->status !== 'completed') {
+            abort(403, 'Este curso ha vencido y no fue completado a tiempo.');
+        }
+
 
         $allLessons = $enrollment->course->modules->flatMap->lessons;
         $currentLesson = request('lesson')
             ? $allLessons->firstWhere('id', request('lesson'))
             : $allLessons->first();
 
-        $isLocked = $enrollment->isLocked();
-        $isNotStarted = $enrollment->isNotStarted();
+
 
 
         if (!$isNotStarted && !$isLocked && $currentLesson) {
