@@ -11,6 +11,8 @@ use App\Filament\Admin\Resources\Courses\Schemas\CourseInfolist;
 use App\Filament\Admin\Resources\Courses\Tables\CoursesTable;
 use App\Filament\Admin\Resources\Courses\RelationManagers\ExamRelationManager;
 use App\Filament\Admin\Resources\Courses\RelationManagers\EnrollmentsRelationManager;
+use App\Filament\Clusters\CourseManagement\CourseManagementCluster;
+use App\Filament\Admin\Resources\Courses\RelationManagers\ModulesRelationManager;
 
 
 use App\Models\Course;
@@ -54,6 +56,8 @@ class CourseResource extends Resource
         return [
             ExamRelationManager::class,
             EnrollmentsRelationManager::class,
+                    ModulesRelationManager::class,
+
         ];
     }
 

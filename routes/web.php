@@ -60,4 +60,11 @@ Route::middleware(['auth', 'verified'])->prefix('estudiante')->name('student.')-
 Route::get('/cursos-completados', [DashboardController::class, 'completed'])->name('courses.completed');
 });
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/cursos/{course}/preview', function ($id) {
+        $course = \App\Models\Course::with('modules.lessons')->findOrFail($id);
+        return view('courses.preview', compact('course'));
+    })->name('courses.preview');
+});
+
 require __DIR__.'/auth.php';

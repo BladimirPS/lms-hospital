@@ -195,8 +195,8 @@
 
                     @elseif($currentLesson->type === 'server_video')
                         <video controls class="w-full mb-4 rounded-lg">
-                            <source src="{{ Storage::url($currentLesson->file_path) }}" type="video/mp4">
-                        </video>
+    <source src="{{ Storage::disk('public')->url($currentLesson->file_path) }}" type="video/mp4">
+</video>
 
                     @elseif($currentLesson->type === 'pdf')
                         <iframe src="{{ Storage::url($currentLesson->file_path) }}"
@@ -204,7 +204,7 @@
                         </iframe>
 
                     @elseif($currentLesson->type === 'article')
-                        <div class="mb-4 prose text-gray-700 max-w-none">
+                        <div class="mb-4 text-gray-700 article-content max-w-none">
                             {!! $currentLesson->content !!}
                         </div>
                     @endif

@@ -1,2 +1,17 @@
 @import "tailwindcss";
 @import './variables.css';
+
+.article-content h1 { font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem; color: #1A3A5C; }
+.article-content h2 { font-size: 1.25rem; font-weight: bold; margin-bottom: 0.75rem; color: #1A3A5C; }
+.article-content h3 { font-size: 1.1rem; font-weight: bold; margin-bottom: 0.5rem; color: #1A3A5C; }
+.article-content p { margin-bottom: 1rem; }
+.article-content ul { list-style-type: disc; padding-left: 1.5rem; margin-bottom: 1rem; }
+.article-content ol { list-style-type: decimal; padding-left: 1.5rem; margin-bottom: 1rem; }
+.article-content li { margin-bottom: 0.25rem; }
+.article-content strong { font-weight: bold; }
+.article-content em { font-style: italic; }
+.article-content a { color: #2E74B5; text-decoration: underline; }
+.article-content blockquote { border-left: 4px solid #1A3A5C; padding-left: 1rem; color: #6B7280; margin-bottom: 1rem; }
+.article-content li p {
+    margin-bottom: 0;
+}

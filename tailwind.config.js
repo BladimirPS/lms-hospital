@@ -8,6 +8,9 @@ export default {
         './resources/views/**/*.blade.php',
         './vendor/filament/**/*.blade.php',
     ],
+    safelist: [
+        'article-content',
+    ],
     theme: {
         extend: {
             colors: {
@@ -19,5 +22,7 @@ export default {
             }
         }
     },
-    plugins: [],
+    plugins: [
+        require('@tailwindcss/typography'),
+    ],
 }
