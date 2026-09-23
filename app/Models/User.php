@@ -19,6 +19,7 @@ class User extends Authenticatable implements FilamentUser, HasName
     protected $fillable = [
         'system_code',
         'hospital_code',
+        'dpi',
         'first_name',
         'middle_name',
         'third_name',
@@ -26,6 +27,7 @@ class User extends Authenticatable implements FilamentUser, HasName
         'second_last_name',
         'email',
         'password',
+        'budget_line_id',
         'profile_photo',
         'signature_image',
         'hire_date',
@@ -56,14 +58,14 @@ class User extends Authenticatable implements FilamentUser, HasName
     }
 
     public function getFilamentName(): string
-{
-    return trim(collect([
-        $this->first_name,
-        $this->middle_name,
-        $this->last_name,
-        $this->second_last_name,
-    ])->filter()->implode(' '));
-}
+    {
+        return trim(collect([
+            $this->first_name,
+            $this->middle_name,
+            $this->last_name,
+            $this->second_last_name,
+        ])->filter()->implode(' '));
+    }
 
     public function canAccessPanel(Panel $panel): bool
     {
@@ -106,5 +108,25 @@ class User extends Authenticatable implements FilamentUser, HasName
     {
         return $this->hasMany(NotificationLog::class);
     }
-
+    protected static function booted(): void
+    {
+        static::creating(function (User $user) {
+            if (empty($user->system_code)) {
+                $user->system_code = 'SYS-' . str_pad(
+                    (User::max('id') ?? 0) + 1,
+                    5,
+                    '0',
+                    STR_PAD_LEFT
+                );
+            }
+        });
+    }
+    public function position(): BelongsTo
+    {
+        return $this->belongsTo(Position::class);
+    }
+    public function budgetLine(): BelongsTo
+    {
+        return $this->belongsTo(BudgetLine::class);
+    }
 }

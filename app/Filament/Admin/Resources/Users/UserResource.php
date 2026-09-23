@@ -15,17 +15,19 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Support\Htmlable;
 
 class UserResource extends Resource
 {
     protected static ?string $model = User::class;
     protected static ?string $modelLabel = 'Usuario';
-protected static ?string $pluralModelLabel = 'Usuarios';
-protected static ?string $navigationLabel = 'Usuarios';
+    protected static ?string $pluralModelLabel = 'Usuarios';
+    protected static ?string $navigationLabel = 'Usuarios';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
 
-    protected static ?string $recordTitleAttribute = 'Usuarios';
+    protected static ?string $recordTitleAttribute = 'first_name';
 
     public static function form(Schema $schema): Schema
     {
@@ -58,4 +60,14 @@ protected static ?string $navigationLabel = 'Usuarios';
             'edit' => EditUser::route('/{record}/edit'),
         ];
     }
+    public static function getGlobalSearchResultTitle(Model $record): string
+{
+    return collect([
+        $record->first_name,
+        $record->middle_name,
+        $record->third_name,
+        $record->last_name,
+        $record->second_last_name,
+    ])->filter()->implode(' ');
+}
 }

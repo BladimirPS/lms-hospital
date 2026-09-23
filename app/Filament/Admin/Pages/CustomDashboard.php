@@ -13,7 +13,7 @@ class CustomDashboard extends Page
 {
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedHome;
     //protected static ?string $navigationLabel = 'Escritorio';
-    protected static ?string $title = 'Escritorio';
+    protected static ?string $title = 'Inicio';
     protected static ?int $navigationSort = -1;
 
     protected string $view = 'filament.admin.pages.custom-dashboard';
@@ -52,5 +52,9 @@ class CustomDashboard extends Page
             ->with(['enrollments.course', 'section'])
             ->get();
     }
+    public function getHeading(): string|\Illuminate\Contracts\Support\Htmlable
+{
+    return '';
+}
 
 }

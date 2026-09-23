@@ -20,12 +20,12 @@ class SectionResource extends Resource
 {
     protected static ?string $model = Section::class;
     protected static ?string $modelLabel = 'Sección';
-protected static ?string $pluralModelLabel = 'Secciones';
-protected static ?string $navigationLabel = 'Secciones';
+    protected static ?string $pluralModelLabel = 'Secciones';
+    protected static ?string $navigationLabel = 'Secciones';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingOffice;
 
-    protected static ?string $recordTitleAttribute = 'Seccion';
+    protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Schema $schema): Schema
     {

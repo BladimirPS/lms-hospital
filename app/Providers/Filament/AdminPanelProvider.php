@@ -21,6 +21,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Filament\Admin\Pages\CustomDashboard;
 
+use Filament\View\PanelsRenderHook;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -41,7 +42,8 @@ class AdminPanelProvider extends PanelProvider
             ->pages([
                 CustomDashboard::class,
             ])
-
+            ->darkMode(false)
+            ->sidebarCollapsibleOnDesktop()
             ->navigationItems([
                 NavigationItem::make('Reportes y estadísticas')
                     ->url('/admin-reportes/reportes')
@@ -50,14 +52,26 @@ class AdminPanelProvider extends PanelProvider
                     ->sort(1),
             ])
             ->userMenuItems([
+
                 'settings' => MenuItem::make()
                     ->label('Configuración del sistema')
-                    ->url(fn () => '/admin/profile')
-                    //
-                    ->visible(fn () => auth()->user()->hasRole('superadmin')),
+                    ->url(fn() => '/admin/profile')
+
+                    ->visible(fn() => auth()->user()->hasRole('superadmin')),
             ])
             ->globalSearch(true)
             ->breadcrumbs(true)
+            ->renderHook(
+                PanelsRenderHook::USER_MENU_BEFORE,
+                fn() => view('filament.partials.role-badges', [
+                    'roles' => auth()->user()?->roles ?? collect(),
+                ])
+            )
+
+            ->renderHook(
+                PanelsRenderHook::TOPBAR_LOGO_AFTER,
+                fn() => view('filament.partials.brand-text')
+            )
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,

@@ -20,7 +20,23 @@
 
 .fi-topbar svg {
     color: #ffffff !important;
-    fill: none;
+
+}
+
+.fi-topbar .fi-role-badges .fi-role-name {
+    color: #ffffff !important;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.fi-topbar .fi-role-badges .fi-role-badge-label {
+    background-color: #DBE9FF;
+    color: #1A3A5C !important;
+    padding: 2px 10px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
 }
 
 /* ============================================
@@ -42,8 +58,22 @@
     color: var(--color-text-muted) !important;
 }
 
-.fi-topbar .fi-global-search-field svg {
-    color: var(--color-text-muted) !important;
+.fi-topbar [class*="fi-global-search-result"],
+.fi-topbar [class*="fi-global-search-result"] * {
+    color: var(--color-text) !important;
+}
+
+.fi-topbar .fi-global-search-field .fi-input-wrp-prefix svg.fi-loading-indicator {
+    display: none !important;
+}
+.fi-topbar .fi-global-search-field .fi-input-wrp-prefix svg:not(.fi-loading-indicator) {
+    color: #6b7280 !important;
+    fill: currentColor !important;
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 1.25rem !important;
+    height: 1.25rem !important;
 }
 
 /* Toggle / avatar del menú de usuario (botón cerrado, dentro del topbar) */
@@ -73,16 +103,39 @@
 /* ============================================
    SIDEBAR
    ============================================ */
-.fi-sidebar {
-    background-color: #ffffff;
-    border-right: 1px solid var(--color-border);
-}
+.fi-sidebar,
 .fi-sidebar-nav {
-    background-color: #ffffff;
+    background-color: #EEF4FF;
 }
-.fi-sidebar-item-active .fi-sidebar-item-button {
-    background-color: color-mix(in srgb, var(--color-secondary) 12%, white);
-    color: var(--color-primary);
+
+.fi-sidebar {
+    border-right: 1px solid #DCE7FA;
+}
+
+/* Estado por defecto (no activo): gris */
+.fi-sidebar-item-label,
+.fi-sidebar-group-label,
+.fi-sidebar-item-icon {
+    color: #64748B !important;
+}
+
+/* Item activo: azul + fondo DBE9FF */
+.fi-sidebar-item.fi-active .fi-sidebar-item-btn {
+    background-color: #DBE9FF;
+}
+
+.fi-sidebar-item.fi-active .fi-sidebar-item-label {
+    color: var(--color-primary) !important;
+    font-weight: 600;
+}
+
+.fi-sidebar-item.fi-active .fi-sidebar-item-icon {
+    color: var(--color-primary) !important;
+}
+
+/* Hover en items no activos */
+.fi-sidebar-item:not(.fi-active) .fi-sidebar-item-btn:hover {
+    background-color: #DBE9FF80;
 }
 
 /* ============================================

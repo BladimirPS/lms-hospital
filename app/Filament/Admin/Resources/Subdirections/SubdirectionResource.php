@@ -20,12 +20,12 @@ class SubdirectionResource extends Resource
 {
     protected static ?string $model = Subdirection::class;
     protected static ?string $modelLabel = 'Subdirección';
-protected static ?string $pluralModelLabel = 'Subdirecciones';
-protected static ?string $navigationLabel = 'Subdirecciones';
+    protected static ?string $pluralModelLabel = 'Subdirecciones';
+    protected static ?string $navigationLabel = 'Subdirecciones';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingOffice2;
 
-    protected static ?string $recordTitleAttribute = 'Subdireccion';
+    protected static ?string $recordTitleAttribute = 'name';
 
     public static function form(Schema $schema): Schema
     {

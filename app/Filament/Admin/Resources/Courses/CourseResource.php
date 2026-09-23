@@ -28,9 +28,9 @@ class CourseResource extends Resource
     protected static ?string $navigationLabel = 'Cursos';
     protected static ?string $model = Course::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingLibrary;
 
-    protected static ?string $recordTitleAttribute = 'Cursos';
+    protected static ?string $recordTitleAttribute = 'title';
 
     public static function form(Schema $schema): Schema
     {
@@ -66,5 +66,4 @@ class CourseResource extends Resource
             'edit' => EditCourse::route('/{record}/edit'),
         ];
     }
-
 }

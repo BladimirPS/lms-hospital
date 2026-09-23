@@ -9,6 +9,17 @@ class SubdirectionSeeder extends Seeder
 {
     public function run(): void
     {
-        Subdirection::create(['name' => 'Coordinación de Recursos Humanos']);
+        $subdirections = [
+            ['name' => 'Subdirección Administrativa Financiera'],
+            ['name' => 'Subdirección Médica'],
+            ['name' => 'Subdirección de Enfermería'],
+            ['name' => 'Subdirección Técnica'],
+            ['name' => 'Coordinación de Recursos Humanos'],
+            ['name' => 'Subdirección de Servicios Generales'],
+        ];
+
+        foreach ($subdirections as $subdirection) {
+            Subdirection::create($subdirection);
+        }
     }
 }

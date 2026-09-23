@@ -20,12 +20,12 @@ class DiplomaResource extends Resource
 {
     protected static ?string $model = Diploma::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedAcademicCap;
 
-    protected static ?string $recordTitleAttribute = 'Diplomas';
+    protected static ?string $recordTitleAttribute = 'diploma_code';
     protected static ?string $modelLabel = 'Diploma';
-protected static ?string $pluralModelLabel = 'Diplomas';
-protected static ?string $navigationLabel = 'Diplomas';
+    protected static ?string $pluralModelLabel = 'Diplomas';
+    protected static ?string $navigationLabel = 'Diplomas';
 
     public static function form(Schema $schema): Schema
     {
