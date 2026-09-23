@@ -22,50 +22,69 @@ class UsersTable
         return $table
             ->columns([
                 TextColumn::make('system_code')
+                ->label('Código del sistema')
                     ->searchable(),
                 TextColumn::make('hospital_code')
+                    ->label('Código del hospital')
                     ->searchable(),
                 TextColumn::make('first_name')
+                    ->label('Nombre')
                     ->searchable(),
                 TextColumn::make('middle_name')
+                    ->label('Segundo nombre')
                     ->searchable(),
                 TextColumn::make('third_name')
+                    ->label('Tercer nombre')
                     ->searchable(),
                 TextColumn::make('last_name')
+                    ->label('Apellido paterno')
                     ->searchable(),
                 TextColumn::make('second_last_name')
+                    ->label('Apellido materno')
                     ->searchable(),
                 TextColumn::make('email')
-                    ->label('Email address')
+                    ->label('Correo Electrónico')
                     ->searchable(),
                 TextColumn::make('email_verified_at')
+                ->label('Correo verificado')
                     ->dateTime()
                     ->sortable(),
                 TextColumn::make('profile_photo')
+                ->label('Foto de perfil')
                     ->searchable(),
-                ImageColumn::make('signature_image'),
+                ImageColumn::make('signature_image')
+                    ->label('Firma'),
                 TextColumn::make('hire_date')
+                ->label('Fecha de contratación')
                     ->date()
                     ->sortable(),
-                TextColumn::make('position')
+                TextColumn::make('position.name')
+                    ->label('Puesto')
                     ->searchable(),
                 TextColumn::make('phone')
+                    ->label('Teléfono')
                     ->searchable(),
                 TextColumn::make('section.name')
+                    ->label('Sección')
                     ->searchable(),
                 IconColumn::make('active')
+                ->label('Estado')
                     ->boolean(),
                 TextColumn::make('invitation_sent_at')
+                    ->label('Invitación enviada')
                     ->dateTime()
                     ->sortable(),
                 TextColumn::make('last_access_at')
+                    ->label('Último acceso')
                     ->dateTime()
                     ->sortable(),
                 TextColumn::make('created_at')
+                    ->label('Creado el')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
+                    ->label('Actualizado el')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),

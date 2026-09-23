@@ -7,5 +7,7 @@ use Filament\Resources\Pages\CreateRecord;
 
 class CreateSection extends CreateRecord
 {
+    protected static ?string $title = 'Crear sección';
     protected static string $resource = SectionResource::class;
+    protected static ?string $slug = 'crear-seccion';
 }

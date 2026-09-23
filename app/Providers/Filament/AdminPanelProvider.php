@@ -53,6 +53,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->userMenuItems([
 
+
                 'settings' => MenuItem::make()
                     ->label('Configuración del sistema')
                     ->url(fn() => '/admin/profile')

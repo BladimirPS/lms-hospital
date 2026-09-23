@@ -20,6 +20,8 @@ class Enrollment extends Model
         'completed_at',
         'status',
         'progress',
+        'start_date',
+        'due_date',
     ];
 
     protected function casts(): array
@@ -28,8 +30,34 @@ class Enrollment extends Model
             'enrolled_at' => 'datetime',
             'completed_at' => 'datetime',
             'progress' => 'integer',
+            'start_date' => 'date',
+            'due_date' => 'date',
         ];
     }
+
+    public function getEffectiveStartDate()
+    {
+        return $this->start_date ?? $this->course->start_date;
+    }
+
+     public function getEffectiveDueDate()
+    {
+        return $this->due_date ?? $this->course->due_date;
+    }
+
+    public function isLocked(): bool
+    {
+        $dueDate = $this->getEffectiveDueDate();
+        return $dueDate && $dueDate->isPast();
+    }
+
+    public function isNotStarted(): bool
+    {
+        $startDate = $this->getEffectiveStartDate();
+        return $startDate && $startDate->isFuture();
+    }
+
+
 
     public function user(): BelongsTo
     {

@@ -22,6 +22,7 @@ class SectionResource extends Resource
     protected static ?string $modelLabel = 'Sección';
     protected static ?string $pluralModelLabel = 'Secciones';
     protected static ?string $navigationLabel = 'Secciones';
+    protected static ?string $slug = 'secciones';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingOffice;
 
@@ -53,9 +54,9 @@ class SectionResource extends Resource
     {
         return [
             'index' => ListSections::route('/'),
-            'create' => CreateSection::route('/create'),
+            'create' => CreateSection::route('/crear'),
             'view' => ViewSection::route('/{record}'),
-            'edit' => EditSection::route('/{record}/edit'),
+            'edit' => EditSection::route('/{record}/editar'),
         ];
     }
 }

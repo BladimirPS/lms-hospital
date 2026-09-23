@@ -13,17 +13,26 @@ class CourseController extends Controller
 {
     public function show(Enrollment $enrollment)
     {
-        $enrollment->load(['course.modules.lessons', 'lessonProgress']);
+        if ($enrollment->course->status !== 'published') {
+            abort(403, 'Este curso no está disponible.');
+        }
+
+        if ($enrollment->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        $enrollment->load(['course.modules.lessons', 'lessonProgress', 'course']);
 
         $allLessons = $enrollment->course->modules->flatMap->lessons;
-
-        // Lección actual
         $currentLesson = request('lesson')
             ? $allLessons->firstWhere('id', request('lesson'))
             : $allLessons->first();
 
-        // Marcar automáticamente como vista
-        if ($currentLesson) {
+        $isLocked = $enrollment->isLocked();
+        $isNotStarted = $enrollment->isNotStarted();
+
+
+        if (!$isNotStarted && !$isLocked && $currentLesson) {
             LessonProgress::firstOrCreate([
                 'enrollment_id' => $enrollment->id,
                 'lesson_id'     => $currentLesson->id,
@@ -32,7 +41,7 @@ class CourseController extends Controller
                 'viewed_at' => now(),
             ]);
 
-            // Recalcular progreso
+
             $totalLessons  = $allLessons->count();
             $viewedLessons = LessonProgress::where('enrollment_id', $enrollment->id)
                 ->where('viewed', true)
@@ -44,97 +53,98 @@ class CourseController extends Controller
                     : 0,
             ]);
 
-            // Recargar el progreso actualizado
+
             $enrollment->load('lessonProgress');
         }
 
-        // Lección siguiente
-        $currentIndex  = $allLessons->search(fn ($l) => $l->id === $currentLesson?->id);
+
+        $currentIndex  = $allLessons->search(fn($l) => $l->id === $currentLesson?->id);
         $nextLesson    = $allLessons->get($currentIndex + 1);
 
-        return view('student.course', compact('enrollment', 'currentLesson', 'nextLesson'));
+        return view('student.course', compact('enrollment', 'currentLesson', 'nextLesson', 'isLocked', 'isNotStarted'));
     }
+
     public function exam(Enrollment $enrollment)
-{
-    $enrollment->load(['course.exam.questions.options']);
+    {
+        $enrollment->load(['course.exam.questions.options']);
 
-    $questions = $enrollment->course->exam->questions->shuffle();
+        $questions = $enrollment->course->exam->questions->shuffle();
 
-    return view('student.exam', compact('enrollment', 'questions'));
-}
-
-public function submitExam(Enrollment $enrollment, Request $request)
-{
-    $enrollment->load(['course.exam.questions.options']);
-
-    $questions   = $enrollment->course->exam->questions;
-    $answers     = $request->input('answers', []);
-    $correct     = 0;
-    $total       = $questions->count();
-
-    foreach ($questions as $question) {
-        $selected = $answers[$question->id] ?? [];
-        if (!is_array($selected)) {
-            $selected = [$selected];
-        }
-
-        $correctOptions = $question->options
-            ->where('is_correct', true)
-            ->pluck('id')
-            ->map(fn($id) => (string) $id)
-            ->sort()
-            ->values();
-
-        $selectedSorted = collect($selected)
-            ->map(fn($id) => (string) $id)
-            ->sort()
-            ->values();
-
-        if ($correctOptions->toArray() === $selectedSorted->toArray()) {
-            $correct++;
-        }
+        return view('student.exam', compact('enrollment', 'questions'));
     }
 
-    $score  = $total > 0 ? round(($correct / $total) * 100, 2) : 0;
-    $passed = $score >= $enrollment->course->minimum_score;
+    public function submitExam(Enrollment $enrollment, Request $request)
+    {
+        $enrollment->load(['course.exam.questions.options']);
 
-    // Registrar intento
-    $attempt = $enrollment->attempts()->create([
-        'attempt_number' => $enrollment->attempts()->count() + 1,
-        'started_at'     => now(),
-        'finished_at'    => now(),
-        'score'          => $score,
-        'passed'         => $passed,
-        'completed'      => true,
-    ]);
+        $questions   = $enrollment->course->exam->questions;
+        $answers     = $request->input('answers', []);
+        $correct     = 0;
+        $total       = $questions->count();
 
-    // Guardar respuestas
-    foreach ($questions as $question) {
-        $selected = $answers[$question->id] ?? [];
-        if (!is_array($selected)) {
-            $selected = [$selected];
-        }
-        foreach ($selected as $optionId) {
-            $option = $question->options->firstWhere('id', $optionId);
-            if ($option) {
-                $attempt->answers()->create([
-                    'question_id' => $question->id,
-                    'option_id'   => $optionId,
-                    'is_correct'  => $option->is_correct,
-                ]);
+        foreach ($questions as $question) {
+            $selected = $answers[$question->id] ?? [];
+            if (!is_array($selected)) {
+                $selected = [$selected];
+            }
+
+            $correctOptions = $question->options
+                ->where('is_correct', true)
+                ->pluck('id')
+                ->map(fn($id) => (string) $id)
+                ->sort()
+                ->values();
+
+            $selectedSorted = collect($selected)
+                ->map(fn($id) => (string) $id)
+                ->sort()
+                ->values();
+
+            if ($correctOptions->toArray() === $selectedSorted->toArray()) {
+                $correct++;
             }
         }
-    }
 
-    // Actualizar inscripción si aprobó
-    if ($passed) {
-        $enrollment->update(['status' => 'completed']);
-    }
+        $score  = $total > 0 ? round(($correct / $total) * 100, 2) : 0;
+        $passed = $score >= $enrollment->course->minimum_score;
 
-    return redirect()->route('student.exam.result', [$enrollment, $attempt]);
-}
-public function examResult(Enrollment $enrollment, ExamAttempt $attempt)
-{
-    return view('student.exam-result', compact('enrollment', 'attempt'));
-}
+        // Registrar intento
+        $attempt = $enrollment->attempts()->create([
+            'attempt_number' => $enrollment->attempts()->count() + 1,
+            'started_at'     => now(),
+            'finished_at'    => now(),
+            'score'          => $score,
+            'passed'         => $passed,
+            'completed'      => true,
+        ]);
+
+        // Guardar respuestas
+        foreach ($questions as $question) {
+            $selected = $answers[$question->id] ?? [];
+            if (!is_array($selected)) {
+                $selected = [$selected];
+            }
+            foreach ($selected as $optionId) {
+                $option = $question->options->firstWhere('id', $optionId);
+                if ($option) {
+                    $attempt->answers()->create([
+                        'question_id' => $question->id,
+                        'option_id'   => $optionId,
+                        'is_correct'  => $option->is_correct,
+                    ]);
+                }
+            }
+        }
+
+        // Actualizar inscripción si aprobó
+        if ($passed) {
+            $enrollment->update(['status' => 'completed']);
+        }
+
+        return redirect()->route('student.exam.result', [$enrollment, $attempt]);
+    }
+    public function examResult(Enrollment $enrollment, ExamAttempt $attempt)
+    {
+        return view('student.exam-result', compact('enrollment', 'attempt'));
+    }
 }

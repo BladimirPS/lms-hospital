@@ -24,6 +24,7 @@ class UserResource extends Resource
     protected static ?string $modelLabel = 'Usuario';
     protected static ?string $pluralModelLabel = 'Usuarios';
     protected static ?string $navigationLabel = 'Usuarios';
+    protected static ?string $slug = 'usuarios';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
 
@@ -55,9 +56,9 @@ class UserResource extends Resource
     {
         return [
             'index' => ListUsers::route('/'),
-            'create' => CreateUser::route('/create'),
+            'create' => CreateUser::route('/crear'),
             'view' => ViewUser::route('/{record}'),
-            'edit' => EditUser::route('/{record}/edit'),
+            'edit' => EditUser::route('/{record}/editar'),
         ];
     }
     public static function getGlobalSearchResultTitle(Model $record): string

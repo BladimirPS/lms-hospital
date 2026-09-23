@@ -29,6 +29,8 @@ class CourseResource extends Resource
     protected static ?string $pluralModelLabel = 'Cursos';
     protected static ?string $navigationLabel = 'Cursos';
     protected static ?string $model = Course::class;
+    protected static ?string $slug = 'cursos';
+
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingLibrary;
 
@@ -56,7 +58,7 @@ class CourseResource extends Resource
         return [
             ExamRelationManager::class,
             EnrollmentsRelationManager::class,
-                    ModulesRelationManager::class,
+            ModulesRelationManager::class,
 
         ];
     }
@@ -65,9 +67,9 @@ class CourseResource extends Resource
     {
         return [
             'index' => ListCourses::route('/'),
-            'create' => CreateCourse::route('/create'),
+            'create' => CreateCourse::route('/crear'),
             'view' => ViewCourse::route('/{record}'),
-            'edit' => EditCourse::route('/{record}/edit'),
+            'edit' => EditCourse::route('/{record}/editar'),
         ];
     }
 }

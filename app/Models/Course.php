@@ -109,6 +109,8 @@ public function createEnrollmentsForSections(): void
                 'status'      => 'in_progress',
                 'progress'    => 0,
                 'enrolled_at' => now(),
+                'start_date'  => $this->start_date,
+                'due_date'    => $this->due_date,
             ]);
         }
     }

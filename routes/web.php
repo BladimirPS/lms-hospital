@@ -57,7 +57,7 @@ Route::middleware(['auth', 'verified'])->prefix('estudiante')->name('student.')-
     Route::post('/cursos/{enrollment}/evaluacion/enviar', [CourseController::class, 'submitExam'])->name('exam.submit');
     Route::get('/cursos/{enrollment}/evaluacion/resultado/{attempt}', [CourseController::class, 'examResult'])->name('exam.result');
     Route::get('/mis-cursos', [DashboardController::class, 'inProgress'])->name('courses.progress');
-Route::get('/cursos-completados', [DashboardController::class, 'completed'])->name('courses.completed');
+    Route::get('/cursos-completados', [DashboardController::class, 'completed'])->name('courses.completed');
 });
 
 Route::middleware(['auth'])->group(function () {
@@ -67,4 +67,4 @@ Route::middleware(['auth'])->group(function () {
     })->name('courses.preview');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

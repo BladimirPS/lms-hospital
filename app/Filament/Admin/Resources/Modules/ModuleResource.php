@@ -22,7 +22,7 @@ class ModuleResource extends Resource
     protected static bool $shouldRegisterNavigation = false;
     protected static ?string $model = Module::class;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
-
+protected static ?string $slug = 'modulos';
     protected static ?string $recordTitleAttribute = 'title';
 
     public static function form(Schema $schema): Schema
@@ -46,8 +46,8 @@ class ModuleResource extends Resource
     {
         return [
             'index' => ListModules::route('/'),
-            'create' => CreateModule::route('/create'),
-            'edit' => EditModule::route('/{record}/edit'),
+            'create' => CreateModule::route('/crear'),
+            'edit' => EditModule::route('/{record}/editar'),
         ];
     }
 }

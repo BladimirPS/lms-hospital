@@ -7,7 +7,7 @@
             Bienvenido, {{ auth()->user()->first_name }} {{ auth()->user()->last_name }}
         </h1>
         <p class="mt-1 text-sm text-gray-500">
-            {{ auth()->user()->position ?? 'Empleado' }} —
+            {{ auth()->user()->position->name ?? 'Empleado' }} —
             {{ auth()->user()->section->name ?? '' }}
         </p>
     </div>

@@ -15,6 +15,7 @@ class CustomDashboard extends Page
     //protected static ?string $navigationLabel = 'Escritorio';
     protected static ?string $title = 'Inicio';
     protected static ?int $navigationSort = -1;
+    protected static ?string $slug = 'inicio';
 
     protected string $view = 'filament.admin.pages.custom-dashboard';
 

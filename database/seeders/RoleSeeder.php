@@ -18,8 +18,6 @@ class RoleSeeder extends Seeder
         Role::create(['name' => 'encargado']);
         Role::create(['name' => 'estudiante']);
 
-        // Asignar superadmin al usuario creado
-        $admin = User::where('email', 'admin@email.com')->first();
-        $admin->assignRole('superadmin');
+
     }
 }

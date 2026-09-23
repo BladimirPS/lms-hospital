@@ -22,6 +22,7 @@ class SubdirectionResource extends Resource
     protected static ?string $modelLabel = 'Subdirección';
     protected static ?string $pluralModelLabel = 'Subdirecciones';
     protected static ?string $navigationLabel = 'Subdirecciones';
+    protected static ?string $slug = 'subdirecciones';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingOffice2;
 
@@ -53,9 +54,9 @@ class SubdirectionResource extends Resource
     {
         return [
             'index' => ListSubdirections::route('/'),
-            'create' => CreateSubdirection::route('/create'),
+            'create' => CreateSubdirection::route('/crear'),
             'view' => ViewSubdirection::route('/{record}'),
-            'edit' => EditSubdirection::route('/{record}/edit'),
+            'edit' => EditSubdirection::route('/{record}/editar'),
         ];
     }
 }

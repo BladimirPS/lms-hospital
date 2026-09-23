@@ -4,7 +4,6 @@
 
     <div class="flex gap-8">
 
-
         {{-- Sidebar izquierdo — índice del curso --}}
         <div class="flex-shrink-0 w-80">
 
@@ -106,53 +105,9 @@
             </div>
         </div>
 
-        {{-- Contenido principal --}}
+ {{-- Contenido principal --}}
         <div class="flex-1">
-{{-- Navegación de lecciones --}}
-<div class="flex items-center justify-between pt-4 mt-6 border-t border-gray-100">
-    <span class="text-xs text-gray-400">
-        ✓ Lección marcada como vista automáticamente
-    </span>
 
-    @if($nextLesson)
-        <a href="?lesson={{ $nextLesson->id }}"
-           class="flex items-center gap-2 px-6 py-2 text-sm font-medium text-white transition-colors duration-200 rounded-lg"
-           style="background-color: #1A3A5C;"
-           onmouseover="this.style.backgroundColor='#2E74B5'"
-           onmouseout="this.style.backgroundColor='#1A3A5C'">
-            Siguiente lección
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-            </svg>
-        </a>
-    @else
-       @if($enrollment->status === 'completed')
-    <div class="pt-4 mt-4 border-t border-gray-100">
-        <div class="block w-full px-4 py-2 text-sm font-medium text-center text-white rounded-lg"
-             style="background-color: #27AE60;">
-            ✓ Curso completado
-        </div>
-
-    </div>
-    </div>
-@elseif($enrollment->progress >= 100)
-    <div class="pt-4 mt-4 border-t border-gray-100">
-        <a href="{{ route('student.exam', $enrollment) }}"
-           class="block w-full px-4 py-2 text-sm font-medium text-center text-white rounded-lg"
-           style="background-color: #27AE60;">
-            Ir a la evaluación final
-        </a>
-    </div>
-@else
-    <div class="pt-4 mt-4 border-t border-gray-100">
-        <button disabled
-                class="w-full px-4 py-2 text-sm font-medium text-gray-400 bg-gray-100 rounded-lg cursor-not-allowed">
-            Complete todas las lecciones para continuar
-        </button>
-    </div>
-@endif
-    @endif
-</div>
             {{-- Título del curso --}}
             <div class="mb-6">
                 <a href="{{ route('student.dashboard') }}"
@@ -164,69 +119,143 @@
                 </h1>
             </div>
 
-            {{-- Lección activa --}}
-            @php
-                $allLessons = $enrollment->course->modules->flatMap->lessons;
-                $currentLesson = request('lesson')
-                    ? $allLessons->firstWhere('id', request('lesson'))
-                    : $allLessons->first();
-            @endphp
+            {{-- Estado: No iniciado --}}
+            @if($isNotStarted)
+                <div class="p-8 text-center bg-white shadow-sm rounded-xl">
+                    <div class="flex items-center justify-center w-16 h-16 mx-auto mb-4 rounded-full"
+                         style="background-color: #EBF3FB;">
+                        <span class="text-2xl">🕐</span>
+                    </div>
+                    <h3 class="mb-2 font-semibold text-gray-800">El curso aún no ha iniciado</h3>
+                    <p class="text-sm text-gray-500">
+                        Este curso estará disponible el
+                        <strong>{{ $enrollment->getEffectiveStartDate()?->format('d/m/Y') }}</strong>
+                    </p>
+                </div>
 
-            @if($currentLesson)
-                <div class="p-6 bg-white shadow-sm rounded-xl">
-                    <h2 class="mb-4 text-lg font-semibold text-gray-800">
-                        {{ $currentLesson->title }}
-                    </h2>
+            {{-- Estado: Vencido --}}
+            @elseif($isLocked)
+                <div class="p-3 mb-4 text-sm text-center rounded-lg"
+                     style="background-color: #FFF3E0; color: #E67E22; border: 1px solid #E67E22;">
+                    ⚠️ Este curso ha vencido el {{ $enrollment->getEffectiveDueDate()?->format('d/m/Y') }}.
+                    Solo puedes consultar el contenido.
+                </div>
 
-                    {{-- Contenido según tipo --}}
-                    @if($currentLesson->type === 'youtube_video')
-                        @php
-                            preg_match('/(?:v=|youtu\.be\/)([^&\s]+)/', $currentLesson->youtube_url, $matches);
-                            $videoId = $matches[1] ?? null;
-                        @endphp
-                        @if($videoId)
-                            <div class="mb-4 aspect-video">
-                                <iframe class="w-full h-full rounded-lg"
-                                        src="https://www.youtube.com/embed/{{ $videoId }}"
-                                        frameborder="0" allowfullscreen>
-                                </iframe>
+                {{-- Mostrar contenido en modo solo lectura --}}
+                @if($currentLesson)
+                    <div class="p-6 bg-white shadow-sm rounded-xl">
+                        <h2 class="mb-4 text-lg font-semibold text-gray-800">
+                            {{ $currentLesson->title }}
+                        </h2>
+
+                        @if($currentLesson->type === 'youtube_video')
+                            @php
+                                preg_match('/(?:v=|youtu\.be\/)([^&\s]+)/', $currentLesson->youtube_url, $matches);
+                                $videoId = $matches[1] ?? null;
+                            @endphp
+                            @if($videoId)
+                                <div class="mb-4 aspect-video">
+                                    <iframe class="w-full h-full rounded-lg"
+                                            src="https://www.youtube.com/embed/{{ $videoId }}"
+                                            frameborder="0" allowfullscreen></iframe>
+                                </div>
+                            @endif
+                        @elseif($currentLesson->type === 'server_video')
+                            <video controls class="w-full mb-4 rounded-lg">
+                                <source src="{{ Storage::disk('public')->url($currentLesson->file_path) }}" type="video/mp4">
+                            </video>
+                        @elseif($currentLesson->type === 'pdf')
+                            <iframe src="{{ Storage::url($currentLesson->file_path) }}"
+                                    class="w-full mb-4 rounded-lg h-96"></iframe>
+                        @elseif($currentLesson->type === 'article')
+                            <div class="mb-4 text-gray-700 article-content">
+                                {!! $currentLesson->content !!}
                             </div>
                         @endif
 
-                    @elseif($currentLesson->type === 'server_video')
-                        <video controls class="w-full mb-4 rounded-lg">
-    <source src="{{ Storage::disk('public')->url($currentLesson->file_path) }}" type="video/mp4">
-</video>
+                        @if($currentLesson->description)
+                            <p class="mb-4 text-sm text-gray-500">{{ $currentLesson->description }}</p>
+                        @endif
 
-                    @elseif($currentLesson->type === 'pdf')
-                        <iframe src="{{ Storage::url($currentLesson->file_path) }}"
-                                class="w-full mb-4 rounded-lg h-96">
-                        </iframe>
-
-                    @elseif($currentLesson->type === 'article')
-                        <div class="mb-4 text-gray-700 article-content max-w-none">
-                            {!! $currentLesson->content !!}
+                        {{-- Navegación sin marcar progreso --}}
+                        <div class="flex items-center justify-between pt-4 mt-4 border-t border-gray-100">
+                            <span class="text-xs text-gray-400">🔒 Modo solo lectura</span>
+                            @if($nextLesson)
+                                <a href="?lesson={{ $nextLesson->id }}"
+                                   class="flex items-center gap-2 px-6 py-2 text-sm font-medium text-white rounded-lg"
+                                   style="background-color: #1A3A5C;">
+                                    Siguiente lección →
+                                </a>
+                            @endif
                         </div>
-                    @endif
+                    </div>
+                @endif
 
-                    @if($currentLesson->description)
-                        <p class="mb-4 text-sm text-gray-500">{{ $currentLesson->description }}</p>
-                    @endif
+            {{-- Estado: Normal --}}
+            @else
+                @if($currentLesson)
+                    <div class="p-6 bg-white shadow-sm rounded-xl">
+                        <h2 class="mb-4 text-lg font-semibold text-gray-800">
+                            {{ $currentLesson->title }}
+                        </h2>
 
-                    {{-- Botón marcar como vista --}}
-                    <form method="POST" action="{{ route('student.lesson.complete', [$enrollment, $currentLesson]) }}">
-                        @csrf
-                        <button type="submit"
-                                class="px-6 py-2 text-sm font-medium text-white transition-colors duration-200 rounded-lg"
-                                style="background-color: #1A3A5C;"
-                                onmouseover="this.style.backgroundColor='#2E74B5'"
-                                onmouseout="this.style.backgroundColor='#1A3A5C'">
-                            ✓ Marcar como vista
-                        </button>
-                    </form>
-                </div>
+                        @if($currentLesson->type === 'youtube_video')
+                            @php
+                                preg_match('/(?:v=|youtu\.be\/)([^&\s]+)/', $currentLesson->youtube_url, $matches);
+                                $videoId = $matches[1] ?? null;
+                            @endphp
+                            @if($videoId)
+                                <div class="mb-4 aspect-video">
+                                    <iframe class="w-full h-full rounded-lg"
+                                            src="https://www.youtube.com/embed/{{ $videoId }}"
+                                            frameborder="0" allowfullscreen></iframe>
+                                </div>
+                            @endif
+                        @elseif($currentLesson->type === 'server_video')
+                            <video controls class="w-full mb-4 rounded-lg">
+                                <source src="{{ Storage::disk('public')->url($currentLesson->file_path) }}" type="video/mp4">
+                            </video>
+                        @elseif($currentLesson->type === 'pdf')
+                            <iframe src="{{ Storage::url($currentLesson->file_path) }}"
+                                    class="w-full mb-4 rounded-lg h-96"></iframe>
+                        @elseif($currentLesson->type === 'article')
+                            <div class="mb-4 text-gray-700 article-content">
+                                {!! $currentLesson->content !!}
+                            </div>
+                        @endif
+
+                        @if($currentLesson->description)
+                            <p class="mb-4 text-sm text-gray-500">{{ $currentLesson->description }}</p>
+                        @endif
+
+                        {{-- Navegación con progreso --}}
+                        <div class="flex items-center justify-between pt-4 mt-4 border-t border-gray-100">
+                            <span class="text-xs text-gray-400">✓ Lección marcada como vista automáticamente</span>
+                            @if($nextLesson)
+                                <a href="?lesson={{ $nextLesson->id }}"
+                                   class="flex items-center gap-2 px-6 py-2 text-sm font-medium text-white transition-colors duration-200 rounded-lg"
+                                   style="background-color: #1A3A5C;"
+                                   onmouseover="this.style.backgroundColor='#2E74B5'"
+                                   onmouseout="this.style.backgroundColor='#1A3A5C'">
+                                    Siguiente lección
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                                    </svg>
+                                </a>
+                            @elseif($enrollment->progress >= 100)
+                                <a href="{{ route('student.exam', $enrollment) }}"
+                                   class="px-6 py-2 text-sm font-medium text-white rounded-lg"
+                                   style="background-color: #27AE60;">
+                                    Ir a la evaluación final →
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+                @endif
             @endif
+
         </div>
     </div>
+
 
 @endsection

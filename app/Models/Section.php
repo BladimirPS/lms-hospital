@@ -31,4 +31,8 @@ class Section extends Model
     {
         return $this->belongsToMany(Course::class, 'course_sections');
     }
+    public function positions(): HasMany
+{
+    return $this->hasMany(Position::class);
+}
 }

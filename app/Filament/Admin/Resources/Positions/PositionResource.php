@@ -21,8 +21,11 @@ class PositionResource extends Resource
     protected static ?string $model = Position::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBriefcase;
-
+ protected static ?string $modelLabel = 'Puesto';
     protected static ?string $recordTitleAttribute = 'name';
+
+    protected static ?string $slug = 'puestos';
+
 
     public static function form(Schema $schema): Schema
     {
@@ -50,9 +53,9 @@ class PositionResource extends Resource
     {
         return [
             'index' => ListPositions::route('/'),
-            'create' => CreatePosition::route('/create'),
+            'create' => CreatePosition::route('/crear'),
             'view' => ViewPosition::route('/{record}'),
-            'edit' => EditPosition::route('/{record}/edit'),
+            'edit' => EditPosition::route('/{record}/editar'),
         ];
     }
 }

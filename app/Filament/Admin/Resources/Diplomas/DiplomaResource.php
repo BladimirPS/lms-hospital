@@ -26,6 +26,7 @@ class DiplomaResource extends Resource
     protected static ?string $modelLabel = 'Diploma';
     protected static ?string $pluralModelLabel = 'Diplomas';
     protected static ?string $navigationLabel = 'Diplomas';
+    protected static ?string $slug = 'diplomas';
 
     public static function form(Schema $schema): Schema
     {
@@ -53,9 +54,9 @@ class DiplomaResource extends Resource
     {
         return [
             'index' => ListDiplomas::route('/'),
-            'create' => CreateDiploma::route('/create'),
+            'create' => CreateDiploma::route('/crear'),
             'view' => ViewDiploma::route('/{record}'),
-            'edit' => EditDiploma::route('/{record}/edit'),
+            'edit' => EditDiploma::route('/{record}/editar'),
         ];
     }
 }

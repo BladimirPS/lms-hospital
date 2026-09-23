@@ -15,6 +15,10 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Actions\Action;
 
+use Filament\Forms\Components\DatePicker;
+
+
+
 
 
 class EnrollmentsRelationManager extends RelationManager
@@ -42,10 +46,17 @@ class EnrollmentsRelationManager extends RelationManager
                     ->options([
                         'in_progress' => 'En progreso',
                         'completed'   => 'Completado',
-                        'abandoned'   => 'Abandonado',
+                        'inactive'    => 'Inactivo',
+                        'locked'      => 'Bloqueado',
                     ])
                     ->default('in_progress')
                     ->required(),
+                DatePicker::make('start_date')
+                    ->label('Fecha de inicio')
+                    ->helperText('Dejar vacío para usar la fecha del curso.'),
+                DatePicker::make('due_date')
+                    ->label('Fecha de vencimiento')
+                    ->helperText('Dejar vacío para usar la fecha del curso.'),
             ]);
     }
 
@@ -94,6 +105,14 @@ class EnrollmentsRelationManager extends RelationManager
                     ->date()
                     ->placeholder('Pendiente')
                     ->sortable(),
+                TextColumn::make('start_date')
+                    ->label('Fecha de inicio')
+                    ->date()
+                    ->sortable(),
+                TextColumn::make('due_date')
+                    ->label('Fecha de vencimiento')
+                    ->date()
+                    ->sortable(),
             ])
             ->headerActions([
                 CreateAction::make()
@@ -128,25 +147,25 @@ class EnrollmentsRelationManager extends RelationManager
 
             ])
             ->bulkActions([
-    BulkActionGroup::make([
-        \Filament\Actions\BulkAction::make('desasignar_seleccionados')
-            ->label('Desasignar seleccionados')
-            ->color('danger')
-            ->icon('heroicon-o-x-circle')
-            ->requiresConfirmation()
-            ->modalHeading('Desasignar empleados')
-            ->modalDescription('¿Está seguro que desea desasignar los empleados seleccionados?')
-            ->action(fn ($records) => $records->each->update(['status' => 'abandoned'])),
+                BulkActionGroup::make([
+                    \Filament\Actions\BulkAction::make('desasignar_seleccionados')
+                        ->label('Desasignar seleccionados')
+                        ->color('danger')
+                        ->icon('heroicon-o-x-circle')
+                        ->requiresConfirmation()
+                        ->modalHeading('Desasignar empleados')
+                        ->modalDescription('¿Está seguro que desea desasignar los empleados seleccionados?')
+                        ->action(fn($records) => $records->each->update(['status' => 'abandoned'])),
 
-        \Filament\Actions\BulkAction::make('reactivar_seleccionados')
-            ->label('Reactivar seleccionados')
-            ->color('success')
-            ->icon('heroicon-o-check-circle')
-            ->requiresConfirmation()
-            ->modalHeading('Reactivar empleados')
-            ->modalDescription('¿Está seguro que desea reactivar los empleados seleccionados?')
-            ->action(fn ($records) => $records->each->update(['status' => 'in_progress'])),
-    ])
-    ]);
+                    \Filament\Actions\BulkAction::make('reactivar_seleccionados')
+                        ->label('Reactivar seleccionados')
+                        ->color('success')
+                        ->icon('heroicon-o-check-circle')
+                        ->requiresConfirmation()
+                        ->modalHeading('Reactivar empleados')
+                        ->modalDescription('¿Está seguro que desea reactivar los empleados seleccionados?')
+                        ->action(fn($records) => $records->each->update(['status' => 'in_progress'])),
+                ])
+            ]);
     }
 }

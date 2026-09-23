@@ -12,8 +12,8 @@ return new class extends Migration
             $table->id();
             $table->string('system_code', 50)->unique()->comment('Código del sistema');
 
-$table->string('hospital_code', 50)->nullable()->comment('Código de empleado / Número de contrato');
-$table->string('dpi', 20)->nullable()->comment('DPI');
+            $table->string('hospital_code', 50)->nullable()->comment('Código de empleado / Número de contrato');
+            $table->string('dpi', 20)->nullable()->comment('DPI');
 
             $table->string('first_name', 100);
             $table->string('middle_name', 100)->nullable();
@@ -42,5 +42,7 @@ $table->string('dpi', 20)->nullable()->comment('DPI');
     public function down(): void
     {
         Schema::dropIfExists('users');
+            Schema::dropIfExists('password_reset_tokens');
+
     }
 };

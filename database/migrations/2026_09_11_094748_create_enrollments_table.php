@@ -14,8 +14,10 @@ return new class extends Migration
             $table->foreignId('course_id')->constrained('courses');
             $table->timestamp('enrolled_at')->useCurrent();
             $table->timestamp('completed_at')->nullable();
-            $table->enum('status', ['in_progress', 'completed', 'abandoned'])->default('in_progress');
+            $table->enum('status', ['in_progress', 'completed', 'inactive', 'locked'])->default('in_progress');
             $table->integer('progress')->default(0);
+            $table->date('start_date')->nullable();
+            $table->date('due_date')->nullable();
             $table->timestamps();
             $table->unique(['user_id', 'course_id']);
         });
