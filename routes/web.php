@@ -67,4 +67,16 @@ Route::middleware(['auth'])->group(function () {
     })->name('courses.preview');
 });
 
+// Rutas Diplomas Vista Previa
+Route::get('/diploma-preview', function () {
+    $enrollment = \App\Models\Enrollment::with([
+        'user.section', 'user.position', 'course', 'diploma'
+    ])->whereHas('diploma')->latest()->first();
+
+    $diploma  = $enrollment->diploma;
+    $settings = \App\Models\DiplomaSettings::first();
+
+    return view('diplomas.template', compact('enrollment', 'diploma', 'settings'));
+})->middleware('auth');
+
 require __DIR__ . '/auth.php';

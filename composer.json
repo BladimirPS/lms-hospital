@@ -13,7 +13,8 @@
         "laravel/framework": "^13.8",
         "laravel/tinker": "^3.0",
         "maatwebsite/excel": "^4.0",
-        "spatie/laravel-permission": "^6.0"
+        "spatie/laravel-permission": "^6.0",
+        "tommasomusetti/filament-doc-studio": "^1.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

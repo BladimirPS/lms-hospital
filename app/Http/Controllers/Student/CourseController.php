@@ -141,7 +141,16 @@ class CourseController extends Controller
             }
         }
 
-        // Actualizar inscripción si aprobó
+        if ($passed) {
+            $enrollment->update(['status' => 'completed']);
+
+
+            if ($enrollment->course->generates_diploma) {
+                app(\App\Services\DiplomaService::class)->generate($enrollment, $attempt);
+            }
+        }
+
+
         if ($passed) {
             $enrollment->update(['status' => 'completed']);
         }

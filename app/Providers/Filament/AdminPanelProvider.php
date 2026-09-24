@@ -20,6 +20,8 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use App\Filament\Admin\Pages\CustomDashboard;
+use TommasoMusetti\DocStudio\DocStudioPlugin;
+
 
 use Filament\View\PanelsRenderHook;
 
@@ -87,6 +89,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 FilamentShieldPlugin::make(),
+                 DocStudioPlugin::make(),
             ])
             ->authMiddleware([
                 Authenticate::class,

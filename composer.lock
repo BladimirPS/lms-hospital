@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3c0c90613c00438620f114220afcb7bd",
+    "content-hash": "dbe6511766f9f4994b730cb56e268c7a",
     "packages": [
         {
             "name": "anourvalar/eloquent-serialize",
@@ -9267,6 +9267,77 @@
                 "source": "https://github.com/tijsverkoyen/CssToInlineStyles/tree/v2.4.0"
             },
             "time": "2025-12-02T11:56:42+00:00"
+        },
+        {
+            "name": "tommasomusetti/filament-doc-studio",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/TommasoMusetti/filament-doc-studio.git",
+                "reference": "dc387f07cb4edace49ff22411b413e636dadaf81"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/TommasoMusetti/filament-doc-studio/zipball/dc387f07cb4edace49ff22411b413e636dadaf81",
+                "reference": "dc387f07cb4edace49ff22411b413e636dadaf81",
+                "shasum": ""
+            },
+            "require": {
+                "dompdf/dompdf": "^3.0",
+                "filament/filament": "^4.0|^5.0",
+                "filament/forms": "^4.0|^5.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.15.0"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^8.0",
+                "orchestra/testbench": "^10.0|^11.0",
+                "pestphp/pest": "^3.7|^4.0",
+                "pestphp/pest-plugin-arch": "^3.0|^4.0",
+                "pestphp/pest-plugin-laravel": "^3.0|^4.0",
+                "rector/rector": "^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "TommasoMusetti\\DocStudio\\DocStudioServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "TommasoMusetti\\DocStudio\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tommaso Musetti",
+                    "email": "musettitommaso@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PDF template builder for end users, inside Filament.",
+            "homepage": "https://github.com/TommasoMusetti/filament-doc-studio",
+            "keywords": [
+                "Tommaso Musetti",
+                "filament",
+                "filament-doc-studio",
+                "filament-plugin",
+                "filamentphp",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/TommasoMusetti/filament-doc-studio/issues",
+                "source": "https://github.com/TommasoMusetti/filament-doc-studio"
+            },
+            "time": "2026-08-15T08:39:05+00:00"
         },
         {
             "name": "ueberdosis/tiptap-php",
